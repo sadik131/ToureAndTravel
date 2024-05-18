@@ -1,5 +1,6 @@
 "use client"
 import { fetchUserAsync, logOut, selectUser } from '@/app/globalRedux/auth/authSlice';
+import { getPackageAsync } from '@/app/globalRedux/package/packageSlice';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
@@ -10,12 +11,14 @@ const Navbar = () => {
 
     const { data } = useSession()
     useEffect(() => {
+        dispatch(getPackageAsync())
         if (data && data.user) {
             dispatch(fetchUserAsync(data.user))
         }
     }, [data?.user, dispatch])
 
     const user = useSelector(selectUser)
+
     const handelLogOut = async (e) => {
         e.preventDefault()
         await signOut()
@@ -28,12 +31,25 @@ const Navbar = () => {
                 <Link href={"/"}>Home</Link>
                 <Link href={""}>Package</Link>
                 <Link href={""}>About us</Link>
-                <Link href={"/page/admin"}>Admin</Link>
-                {user ?
-                    <button onClick={handelLogOut}>log out</button>
-                    :
-                    <Link href={"/page/login"}>login</Link>
+                {
+                    user ? (
+                        user.role === "admin" ? (
+                            <>
+                                <Link href={"/page/AllOrder"}>admin</Link>
+                                <button onClick={handelLogOut}>log out</button>
+                            </>
+                        ) : (
+                            <>
+                                <Link href={"/page/profile"}>profile</Link>
+                                <button onClick={handelLogOut}>log out</button>
+                            </>
+
+                        )
+                    ) : (
+                        <Link href={"/page/login"}>login</Link>
+                    )
                 }
+
             </div>
         </div>
     );

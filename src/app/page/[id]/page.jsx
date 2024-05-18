@@ -32,7 +32,6 @@ function page() {
 
   useEffect(() => {
     dispatch(getpackageByIdAsync(id))
-    console.log(pack)
   }, [id])
 
   const totalPrice = pack?.price * guest + 10
@@ -42,7 +41,6 @@ function page() {
     e.preventDefault()
     if (!user) {
       return toast.error("user must be login")
-
     }
     const data = {
       userId: user._id,
@@ -50,13 +48,16 @@ function page() {
       fullName: name,
       phonNumber: number,
       date: startDate,
+      guest: guest,
       totalPrice
     }
     dispatch(createBookingAsync(data))
+    return toast.success("Success")
   }
 
   // feedback
-  const submitRating = () => {
+  const submitRating = (e) => {
+    e.preventDefault()
     if (!user) {
       return toast.error("user must be login")
 
@@ -69,6 +70,7 @@ function page() {
     }
     dispatch(feedbackAsync(data))
   }
+  console.log(pack)
 
   return (
     <Layout>
@@ -78,7 +80,7 @@ function page() {
         <div className='flex w-full mt-[100px] gap-10'>
           <div className='w-[60%]'>
             <div className='relative w-[100%] h-[500px]'>
-              <Image src={"https://res.cloudinary.com/enchanting/q_70,f_auto,w_1024,h_682,c_fit/ymt-web/2023/12/akrotiri-santorini.jpg"} fill alt="dsf" />
+              <Image src={pack.thumbnil} fill alt="dsf" />
             </div>
             <div className='border border-gray-300 my-5 p-5'>
               <h1 className='text-2xl font-bold my-2'>{pack?.title}</h1>
@@ -108,18 +110,19 @@ function page() {
               <input type="text" onChange={(e) => setComment(e.target.value)} className='w-10/12 rounded-md py-2 my-2' placeholder='Share you thoughts' />
               <button onClick={submitRating} className='px-4 rounded-md bg-orange-400 py-2 text-white'>submit</button>
               <div>
-                <div className='flex justify-between items-center'>
-                  <div className='flex items-center gap-3'>
-                    <span><FaUserCircle className='text-3xl' /></span>
-                    <div className='flex flex-col gap-1'>
-                      <span>Supto</span>
-                      <span>19/5/2024</span>
-                      <p>awosome place that i visited</p>
+                {pack.ratings.map(rat => (
+                  <div key={rat._id} className='flex my-5 justify-between items-center'>
+                    <div className='flex items-center gap-3'>
+                      <span><FaUserCircle className='text-3xl' /></span>
+                      <div className='flex flex-col gap-1'>
+                        <span>Supto</span>
+                        <span>19/5/2024</span>
+                        <p>awosome place that i visited</p>
+                      </div>
                     </div>
+                    <span className='flex items-center gap-2'>5<FaStar className='text-orange-400' /></span>
                   </div>
-                  <span className='flex items-center gap-2'>5<FaStar className='text-orange-400' /></span>
-                </div>
-
+                ))}
               </div>
             </div>
           </div>
@@ -130,7 +133,7 @@ function page() {
                 <span className='flex items-center justify-center'><FaStar className='text-orange-500' /> 5.1(1)</span>
               </div>
               <Row></Row>
-              <form>
+              <form onSubmit={makeBooking}>
                 <h1 className='text-xl my-4 font-bold'>information</h1>
                 <div className='border border-gray-300 p-4'>
                   <input onChange={(e) => setName(e.target.value)} className='px-1 bg-gray-100 py-2 border border-b-gray-300 w-full my-2' placeholder='Full name' type='text' />
@@ -154,7 +157,7 @@ function page() {
                     <span className='font-bold '>${totalPrice}</span>
                   </div>
                 </div>
-                <button onClick={(e) => makeBooking(e)} className='w-full block mt-2 text-white py-2 rounded-md bg-orange-400'>Book Now</button>
+                <button type="submit" className='w-full block mt-2 text-white py-2 rounded-md bg-orange-400'>Book Now</button>
               </form>
             </div>
           </div>

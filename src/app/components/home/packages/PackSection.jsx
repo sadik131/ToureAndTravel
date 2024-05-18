@@ -1,21 +1,15 @@
 "use client"
-import React, { useEffect } from 'react'
+import React from 'react'
 import Layout from '../../Layout';
 import { FaStar } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import Image from 'next/image';
-import { useDispatch, useSelector } from 'react-redux';
-import { getPackageAsync, selectPackage, selectStatus } from '@/app/globalRedux/package/packageSlice';
+import { useSelector } from 'react-redux';
+import { selectPackage, selectStatus } from '@/app/globalRedux/package/packageSlice';
 import Link from 'next/link';
 
 
 function PackSection() {
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        dispatch(getPackageAsync())
-    }, [])
-
     const Packages = useSelector(selectPackage)
     const status = useSelector(selectStatus)
     return (
@@ -30,7 +24,7 @@ function PackSection() {
                         {Packages.map((pack, i) => (
                             <div key={i} className='my-6 border-gray-400 shadow-2xl rounded-lg'>
                                 <div className='w-full h-[250px] relative rounded-md'>
-                                    <Image src={"https://res.cloudinary.com/enchanting/q_70,f_auto,w_1024,h_682,c_fit/ymt-web/2023/12/akrotiri-santorini.jpg"} alt="pack" fill />
+                                    <Image src={pack.thumbnil} alt="pack" fill />
                                 </div>
                                 <div className='px-4'>
                                     <div className='flex items-center justify-between'>

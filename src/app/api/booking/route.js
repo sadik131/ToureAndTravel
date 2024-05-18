@@ -7,7 +7,6 @@ export async function POST(req) {
     const data = await req.json()
     try {
         const result = await Booking.create(data)
-        console.log(result)
         return NextResponse.json(result)
     } catch (error) {
         return NextResponse.json(error)

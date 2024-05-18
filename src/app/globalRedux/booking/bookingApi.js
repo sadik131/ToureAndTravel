@@ -14,8 +14,24 @@ export function getpackageById({ id }) {
         resolve({ data })
     })
 }
+export function getBookingByUserId(id) {
+    return new Promise(async (resolve) => {
+        const responce = await fetch(`http://localhost:3000/api/booking/${id}`)
+        const data = await responce.json()
+        resolve({ data })
+    })
+}
+export function deleteBookingById(id) {
+    return new Promise(async (resolve) => {
+        const responce = await fetch(`http://localhost:3000/api/booking/${id}`, {
+            method: "DELETE",
+            headers: { "content-type": "application/json" }
+        })
+        const data = await responce.json()
+        resolve({ data })
+    })
+}
 export function createBooking(doc) {
-    console.log(doc)
     return new Promise(async (resolve) => {
         const responce = await fetch("http://localhost:3000/api/booking", {
             method: "POST",

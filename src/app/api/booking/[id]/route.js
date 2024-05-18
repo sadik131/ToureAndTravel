@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server"
+import { Booking } from "../../modal/bookingModal"
 import { connectDb } from "../../../../../lib/connectDB"
-import Package from "../../modal/packageModal"
 
 export async function GET(req, { params }) {
     await connectDb()
     const id = params.id
     try {
-        const result = await Package.findOne({ _id: id })
+        const result = await Booking.find({ userId: id }).populate("packageId")
         return NextResponse.json({
             status: true,
             result
@@ -18,32 +18,16 @@ export async function GET(req, { params }) {
         })
     }
 }
-export async function PATCH(req, { params }) {
-    await connectDb()
-    const id = params.id
-    const body = await req.json()
-    // console.log(id)
-    try {
-        const result = await Package.findOneAndUpdate({ _id: id }, body, { new: true })
-        return NextResponse.json({
-            status: true,
-            result
-        })
-    } catch (error) {
-        return NextResponse.json({
-            status: false,
-            error: error.message
-        })
-    }
-}
+
 export async function DELETE(req, { params }) {
     await connectDb()
     const id = params.id
+    console.log(id)
     try {
-        const result = await Package.findOneAndDelete({ _id: id })
+        // const result = await Booking.find({ userId: id }).populate("packageId")
         return NextResponse.json({
             status: true,
-            id
+            // result
         })
     } catch (error) {
         return NextResponse.json({
@@ -51,4 +35,5 @@ export async function DELETE(req, { params }) {
             error: error.message
         })
     }
+
 }

@@ -17,7 +17,6 @@ function page() {
             if (res.ok) {
                 route.push("/")
             }
-            console.log(res)
         } catch (error) {
             console.log(error)
         }
