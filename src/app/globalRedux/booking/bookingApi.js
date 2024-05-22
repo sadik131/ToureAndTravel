@@ -7,7 +7,7 @@ export function getBooking() {
         resolve({ data })
     })
 }
-export function getpackageById({ id }) {
+export function getpackageById(id) {
     return new Promise(async (resolve) => {
         const responce = await fetch(`http://localhost:3000/api/package/${id}`)
         const data = await responce.json()
@@ -32,13 +32,17 @@ export function deleteBookingById(id) {
     })
 }
 export function createBooking(doc) {
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
         const responce = await fetch("http://localhost:3000/api/booking", {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify(doc)
         })
         const data = await responce.json()
+        console.log(data)
+        if (data.errors) {
+            return reject(data.errors);
+        }
         resolve({ data })
     })
 }
@@ -54,6 +58,20 @@ export function feedback(doc) {
         if (data.success) {
             toast.success("Success")
         }
+        resolve({ data })
+    })
+}
+export function editStatus(doc) {
+    return new Promise(async (resolve) => {
+        const responce = await fetch(`http://localhost:3000/api/booking/${doc.id}`, {
+            method: "PATCH",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ status: doc.status })
+        })
+        const data = await responce.json()
+        // if (data.success) {
+        //     toast.success("Success")
+        // }
         resolve({ data })
     })
 }

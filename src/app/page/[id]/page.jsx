@@ -17,7 +17,7 @@ import toast from 'react-hot-toast'
 
 
 function page() {
-  const id = useParams()
+  const { id } = useParams()
   const dispatch = useDispatch()
   const starRatings = [1, 2, 3, 4, 5];
   const pack = useSelector(selectPackage)
@@ -49,10 +49,16 @@ function page() {
       phonNumber: number,
       date: startDate,
       guest: guest,
-      totalPrice
+      totalPrice,
     }
     dispatch(createBookingAsync(data))
-    return toast.success("Success")
+      .unwrap()
+      .then(() => {
+        toast.success("Booking successful")
+      })
+      .catch((err) => {
+        toast.error(err)
+      })
   }
 
   // feedback
@@ -66,11 +72,10 @@ function page() {
       userId: user._id,
       packageId: pack._id,
       comment,
-      rating
+      rating,
     }
     dispatch(feedbackAsync(data))
   }
-  console.log(pack)
 
   return (
     <Layout>
@@ -80,10 +85,11 @@ function page() {
         <div className='flex w-full mt-[100px] gap-10'>
           <div className='w-[60%]'>
             <div className='relative w-[100%] h-[500px]'>
-              <Image src={pack.thumbnil} fill alt="dsf" />
+              <Image src={pack?.thumbnil} fill alt="dsf" />
             </div>
             <div className='border border-gray-300 my-5 p-5'>
               <h1 className='text-2xl font-bold my-2'>{pack?.title}</h1>
+              <p>Available Rooms : {pack.available}</p>
               <div className='my-2 flex items-center flex-row gap-5'>
                 <span className='flex items-center justify-center'><FaStar className='text-orange-500' /> 5.1(1)</span>
                 <span>SomeWhere in {pack?.location}</span>
@@ -110,7 +116,7 @@ function page() {
               <input type="text" onChange={(e) => setComment(e.target.value)} className='w-10/12 rounded-md py-2 my-2' placeholder='Share you thoughts' />
               <button onClick={submitRating} className='px-4 rounded-md bg-orange-400 py-2 text-white'>submit</button>
               <div>
-                {pack.ratings.map(rat => (
+                {pack?.ratings.map(rat => (
                   <div key={rat._id} className='flex my-5 justify-between items-center'>
                     <div className='flex items-center gap-3'>
                       <span><FaUserCircle className='text-3xl' /></span>

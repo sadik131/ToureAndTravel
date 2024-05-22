@@ -22,7 +22,8 @@ function page() {
         description: '',
         thumbnil: '',
         price: 0,
-        maxGust: 0
+        maxGust: 0,
+        available: 0
     });
 
     const handleChange = (e) => {
@@ -71,7 +72,8 @@ function page() {
             description: '',
             price: 0,
             maxGust: 0,
-            thumbnil: ""
+            thumbnil: "",
+            available: 0
         })
         setProgress(0);
         route.push("/page/AllPackage")
@@ -91,6 +93,7 @@ function page() {
                     <input className='w-full block my-2 px-1 py-2' type="text" name="title" placeholder='title' value={data.title} onChange={handleChange} />
                     <input className='w-full block my-2 px-1 py-2' type="text" name="location" placeholder='location' value={data.location} onChange={handleChange} />
                     <input className='w-full block my-2 px-1 py-2' type="text" name="description" placeholder='description' value={data.description} onChange={handleChange} />
+                    <input className='w-full block my-2 px-1 py-2' type="number" name="available" placeholder='available Rooms' value={data.available} onChange={handleChange} />
                     <input className='w-full block my-2 px-1 py-2' type="number" name="price" placeholder='price' value={data.peoples} onChange={handleChange} />
                     <input className='w-full block my-2 px-1 py-2' type="number" name="maxGust" placeholder='number of member' value={data.peoples} onChange={handleChange} />
                     <button type="submit">Submit</button>

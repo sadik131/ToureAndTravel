@@ -19,15 +19,15 @@ export async function GET(req, { params }) {
     }
 }
 
-export async function DELETE(req, { params }) {
+export async function PATCH(req, { params }) {
     await connectDb()
     const id = params.id
-    console.log(id)
+    const update = await req.json()
     try {
-        // const result = await Booking.find({ userId: id }).populate("packageId")
+        const result = await Booking.findOneAndUpdate({ _id: id }, update, { new: true })
         return NextResponse.json({
             status: true,
-            // result
+            result
         })
     } catch (error) {
         return NextResponse.json({

@@ -43,6 +43,16 @@ const packageSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    approve: {
+        type: Boolean,
+        default: false
+    },
+    available: {
+        type: Number,
+        required: true,
+        min: [1,"number is not assign 0"]
+    },
+
     ratings: [ratingSchema]
 
 }, { timestamps: true });

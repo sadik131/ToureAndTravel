@@ -22,7 +22,6 @@ export async function PATCH(req, { params }) {
     await connectDb()
     const id = params.id
     const body = await req.json()
-    // console.log(id)
     try {
         const result = await Package.findOneAndUpdate({ _id: id }, body, { new: true })
         return NextResponse.json({

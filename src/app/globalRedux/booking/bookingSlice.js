@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createBooking, feedback, getBooking, getBookingByUserId, getpackageById ,deleteBookingById} from './bookingApi';
+import { createBooking, feedback, getBooking, getBookingByUserId, getpackageById, deleteBookingById, editStatus } from './bookingApi';
 
 export const getBookingAsync = createAsyncThunk(
     "booking/getBooking",
@@ -35,9 +35,13 @@ export const getBookingByUserIdAsync = createAsyncThunk(
 
 export const createBookingAsync = createAsyncThunk(
     "booking/createBooking",
-    async (doc) => {
-        const responce = await createBooking(doc)
-        return responce.data
+    async (doc, { rejectWithValue }) => {
+        try {
+            const responce = await createBooking(doc)
+            return responce.data
+        } catch (error) {
+            return rejectWithValue(error.message)
+        }
     }
 )
 
@@ -45,6 +49,13 @@ export const feedbackAsync = createAsyncThunk(
     "package/feedback",
     async (data) => {
         const responce = await feedback(data)
+        return responce.data
+    }
+)
+export const editStatusAsync = createAsyncThunk(
+    "package/editStatus",
+    async (data) => {
+        const responce = await editStatus(data)
         return responce.data
     }
 )
@@ -67,21 +78,30 @@ const bookingSlice = createSlice({
             })
             .addCase(getBookingAsync.fulfilled, (state, action) => {
                 state.status = "success",
-                state.booking = action.payload
+                    state.booking = action.payload
             })
             .addCase(getpackageByIdAsync.pending, (state) => {
                 state.status = "loading"
             })
             .addCase(getpackageByIdAsync.fulfilled, (state, action) => {
                 state.status = "success",
-                state.package = action.payload.result
+                    state.package = action.payload.result
             })
             .addCase(getBookingByUserIdAsync.pending, (state) => {
                 state.status = "loading"
             })
             .addCase(getBookingByUserIdAsync.fulfilled, (state, action) => {
                 state.status = "success",
-                state.userBooks = action.payload.result
+                    state.userBooks = action.payload.result
+            })
+            .addCase(editStatusAsync.pending, (state) => {
+                state.status = "loading"
+            })
+            .addCase(editStatusAsync.fulfilled, (state, action) => {
+                state.status = "success"
+                const updateId = action.payload.result._id
+                const index = state.booking.findIndex(pk => pk._id === updateId)
+                state.booking[index] = action.payload.result
             })
             .addCase(feedbackAsync.pending, (state) => {
                 state.status = 'loading';
@@ -96,6 +116,15 @@ const bookingSlice = createSlice({
             .addCase(createBookingAsync.fulfilled, (state, action) => {
                 state.status = "success",
                     state.booking = state.booking.push(action.payload)
+                const packageId = action.payload.packageId
+                if (state.package && state.package._id === packageId) {
+                    state.package.available -= 1
+                }
+                console.log(state.package)
+            })
+            .addCase(createBookingAsync.rejected, (state, action) => {
+                state.status = "failed",
+                    state.error = action.payload
             })
     }
 })

@@ -36,6 +36,6 @@ const bookingSchema = new mongoose.Schema({
         enum: ['pending', 'confirm', "cencel"],
         default: "pending"
     }
-})
+}, { timestamps: true })
 
 export const Booking = mongoose.models.Booking || mongoose.model("Booking", bookingSchema)

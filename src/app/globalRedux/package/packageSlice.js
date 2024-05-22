@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createPackage, deletePackage, getPackage, editPackage } from './packageApi';
+import { createPackage, deletePackage, getPackage, editPackage, approvePackage } from './packageApi';
+import toast from 'react-hot-toast';
 
 export const getPackageAsync = createAsyncThunk(
     "package/getPackage",
@@ -26,6 +27,14 @@ export const editPackageAsync = createAsyncThunk(
     "package/editPackage",
     async (update) => {
         const responce = await editPackage(update)
+        return responce.data
+    }
+)
+
+export const approvePackageAsync = createAsyncThunk(
+    "package/approvePackage",
+    async (update) => {
+        const responce = await approvePackage(update)
         return responce.data
     }
 )
@@ -64,16 +73,28 @@ const packageSlice = createSlice({
             .addCase(deletePackageAsync.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.packages = state.packages.filter(pk => pk._id !== action.payload.id)
-                console.log(state.packages)
+            })
+            .addCase(approvePackageAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(approvePackageAsync.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                const index = state.packages.findIndex(pk => pk._id === action.payload.result._id)
+                if (index !== -1) {
+                    state.packages[index] = action.payload.result
+                }
             })
             .addCase(editPackageAsync.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(editPackageAsync.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                console.log(action.payload)
-                const index = state.packages.findIndex(pk => pk._id !== action.payload._id)
-                console.log(index)
+                const index = state.packages.findIndex(pk => pk._id === action.payload.result._id)
+                if (index !== -1) {
+                    state.packages[index] = action.payload.result;
+                } else {
+                    toast.error('Package not found');
+                }
             })
     }
 })

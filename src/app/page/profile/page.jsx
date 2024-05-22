@@ -52,8 +52,8 @@ function page() {
                             </div>
                             <div>
                                 <h1>Package : {book._id}</h1>
-                                <h1>location : {book.packageId.location}</h1>
-                                <h1>Price : ${book.packageId.price}/per person</h1>
+                                <h1>location : {book.packageId?.location}</h1>
+                                <h1>Price : ${book.packageId?.price}/per person</h1>
                                 <h1>rate : 5</h1>
                             </div>
                         </div>
