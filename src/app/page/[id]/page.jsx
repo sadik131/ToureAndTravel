@@ -61,6 +61,7 @@ function page() {
       })
   }
 
+
   // feedback
   const submitRating = (e) => {
     e.preventDefault()
@@ -76,10 +77,10 @@ function page() {
     }
     dispatch(feedbackAsync(data))
   }
-
+  console.log(status)
   return (
     <Layout>
-      {status === "loading" ? (
+      {status === "loading" || !pack ? (
         <div>Loading...</div>
       ) : (
         <div className='flex w-full mt-[100px] gap-10'>
@@ -163,7 +164,7 @@ function page() {
                     <span className='font-bold '>${totalPrice}</span>
                   </div>
                 </div>
-                <button type="submit" className='w-full block mt-2 text-white py-2 rounded-md bg-orange-400'>Book Now</button>
+                <button type='submit'>Booking</button>
               </form>
             </div>
           </div>

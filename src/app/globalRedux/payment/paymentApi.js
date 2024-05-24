@@ -1,7 +1,6 @@
 export function createPaymentIntent(amount){
-    console.log(amount)
     return new Promise(async(resolve)=>{
-        const responce = await fetch("http://localhost:3000/create-payment",{
+        const responce = await fetch("http://localhost:3000/api/create-payment",{
             method:"POST",
             headers:{"content-type":"application/json"},
             body:JSON.stringify(amount)

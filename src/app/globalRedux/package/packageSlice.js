@@ -4,8 +4,8 @@ import toast from 'react-hot-toast';
 
 export const getPackageAsync = createAsyncThunk(
     "package/getPackage",
-    async () => {
-        const responce = await getPackage()
+    async (prop) => {
+        const responce = await getPackage(prop)
         return responce.data
     }
 )

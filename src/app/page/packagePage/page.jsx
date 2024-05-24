@@ -1,26 +1,30 @@
 "use client"
 import Layout from '@/app/components/Layout'
 import PackCart from '@/app/components/PackCart'
-import { filterPackageAsync, selectPackage, selectStatus } from '@/app/globalRedux/package/packageSlice'
-import React, { useState } from 'react'
+import { filterPackageAsync, getPackageAsync, selectPackage, selectStatus } from '@/app/globalRedux/package/packageSlice'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 function page() {
     const [location, setLocation] = useState("")
+    const [option, setOption] = useState("asc")
     const status = useSelector(selectStatus)
     const packagesApprove = useSelector(selectPackage) || []
     const packages = packagesApprove.filter(pk => pk.approve === true)
     const dispatch = useDispatch()
 
-    if (status === "loading") {
-        return <Layout><h1>loading...</h1></Layout>
-    }
+    // useEffect(()=>{
+    // },[dispatch])
 
     const handelfilter = (e) => {
         e.preventDefault()
-        dispatch(filterPackageAsync({ location }))
+        dispatch(getPackageAsync({ location, option }))
+        setLocation("")
     }
 
+    if (status === "loading") {
+        return <Layout><h1>loading...</h1></Layout>
+    }
     return (
         <Layout>
             <div>
@@ -32,9 +36,10 @@ function page() {
                     </div>
                     <div>
                         <label>location</label>
-                        <select>
-                            <option value="low">low</option>
-                            <option value="high">high</option>
+                        <label>Sort by Price</label>
+                        <select value={option} onChange={(e) => setOption(e.target.value)}>
+                            <option value="asc">Low to High</option>
+                            <option value="desc">High to Low</option>
                         </select>
                     </div>
                     <button type='submit'>submit</button>

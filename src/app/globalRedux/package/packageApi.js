@@ -1,8 +1,15 @@
 import toast from "react-hot-toast"
 
-export function getPackage() {
+export function getPackage(prop) {
+
     return new Promise(async (resolve) => {
-        const responce = await fetch("http://localhost:3000/api/package")
+        let url = "http://localhost:3000/api/package"
+        if (prop) {
+            url = `http://localhost:3000/api/package?location=${prop.location}&price=${prop.option}`
+        }
+        console.log(url)
+        console.log(prop)
+        const responce = await fetch(url)
         const data = await responce.json()
         resolve({ data })
     })

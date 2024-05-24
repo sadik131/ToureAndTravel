@@ -39,7 +39,6 @@ export function createBooking(doc) {
             body: JSON.stringify(doc)
         })
         const data = await responce.json()
-        console.log(data)
         if (data.errors) {
             return reject(data.errors);
         }

@@ -63,7 +63,7 @@ export const editStatusAsync = createAsyncThunk(
 const bookingSlice = createSlice({
     name: "booking",
     initialState: {
-        status: "loading",
+        status: "idle",
         userBooks: [],
         booking: [],
         package: null
@@ -120,7 +120,6 @@ const bookingSlice = createSlice({
                 if (state.package && state.package._id === packageId) {
                     state.package.available -= 1
                 }
-                console.log(state.package)
             })
             .addCase(createBookingAsync.rejected, (state, action) => {
                 state.status = "failed",
