@@ -1,11 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createPackage, deletePackage, getPackage, editPackage, approvePackage } from './packageApi';
+import { createPackage, deletePackage, getPackage, editPackage, approvePackage, filterPackage } from './packageApi';
 import toast from 'react-hot-toast';
 
 export const getPackageAsync = createAsyncThunk(
     "package/getPackage",
     async () => {
         const responce = await getPackage()
+        return responce.data
+    }
+)
+export const filterPackageAsync = createAsyncThunk(
+    "package/filterPackage",
+    async (filter) => {
+        const responce = await filterPackage(filter)
         return responce.data
     }
 )
@@ -59,7 +66,13 @@ const packageSlice = createSlice({
                 state.status = 'succeeded';
                 state.packages = action.payload;
             })
-
+            .addCase(filterPackageAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(filterPackageAsync.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.packages = action.payload;
+            })
             .addCase(createPackageAsync.pending, (state) => {
                 state.status = 'loading';
             })

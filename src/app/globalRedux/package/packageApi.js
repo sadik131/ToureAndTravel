@@ -7,6 +7,16 @@ export function getPackage() {
         resolve({ data })
     })
 }
+export function filterPackage(filter) {
+    const { location, price } = filter;
+    const params = new URLSearchParams({ location }).toString();
+    return new Promise(async (resolve) => {
+        const responce = await fetch(`http://localhost:3000/api/filter?${params}`)
+        const data = await responce.json()
+        console.log(data)
+        resolve({ data })
+    })
+}
 export function createPackage(doc) {
     return new Promise(async (resolve) => {
         const responce = await fetch("http://localhost:3000/api/package", {

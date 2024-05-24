@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server"
 import { Booking } from "../../modal/bookingModal"
 import { connectDb } from "../../../../../lib/connectDB"
+import { getServerSession } from "next-auth"
 
 export async function GET(req, { params }) {
+    
     await connectDb()
     const id = params.id
     try {

@@ -29,7 +29,7 @@ const Navbar = () => {
             <h1>logo</h1>
             <div className='flex gap-2'>
                 <Link href={"/"}>Home</Link>
-                <Link href={""}>Package</Link>
+                <Link href={"/page/packagePage"}>Package</Link>
                 <Link href={""}>About us</Link>
                 {
                     user ? (
@@ -43,7 +43,6 @@ const Navbar = () => {
                                 <Link href={"/page/profile"}>profile</Link>
                                 <button onClick={handelLogOut}>log out</button>
                             </>
-
                         )
                     ) : (
                         <Link href={"/page/login"}>login</Link>
